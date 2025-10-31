@@ -1,19 +1,32 @@
 package javaCollection.home2;
 
+import javaCollection.home2.enums.OrderStatus;
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class Order {
     private int orderId;
-    private List<Product> products;
+    private List<Product> products = new ArrayList<>();
     private LocalDate orderDate;
     private OrderStatus status; // NEW, PROCESSING, COMPLETED, CANCELLED
 
-    public Order(int orderId, List<Product> products, LocalDate orderDate, OrderStatus status) {
+    public Order(int orderId) {
         this.orderId = orderId;
-        this.products = products;
-        this.orderDate = orderDate;
-        this.status = status;
+        this.status = OrderStatus.NEW;
+        this.orderDate = LocalDate.now();
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", products=" + products +
+                ", orderDate=" + orderDate +
+                ", status=" + status +
+                '}';
     }
 
     public int getOrderId() {
@@ -47,13 +60,26 @@ public class Order {
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
+
+
+    public void addProduct(Product product) {
+        products.add(product);
+    }
+
+
+    public void removeProduct(Product product) {
+        products.removeIf(prod -> prod.equals(product));
+    }
+
+    //Получение цены по заказу
+    public Double getTotalPrice() {
+        double sum2 = products.stream().mapToDouble(prod -> prod.getPrice()).sum();
+        return sum2;
+    }
+
+
 }
 
 
 
- enum OrderStatus{
-     NEW,
-     PROCESSING,
-     COMPLETED,
-     CANCELLED
-}
+
